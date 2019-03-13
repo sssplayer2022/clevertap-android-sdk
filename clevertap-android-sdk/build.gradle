@@ -16,28 +16,40 @@ repositories {
     jcenter()
 }
 
+def getBuildNumber() {
+    return System.getenv("BUILD_NUMBER") as Integer ?: 0
+}
+//com.clevertap.android:clevertap-android-sdk:3.4.2
 ext {
-    bintrayRepo = 'Maven'
-    bintrayName = 'CleverTapAndroidSDK'
-    org = 'clevertap'
+    publishGroupId = 'com.clevertap.android.mx'
+    publishVersion = "3.4.2.${getBuildNumber()}"
+    publishVersionCode = 342
+    publishUrlSnapshot = 'http://mx.git.com:8098/nexus/content/repositories/snapshots/'
+    publishUrlRelease = 'http://mx.git.com:8098/nexus/content/repositories/releases/'
+    publishScript = 'https://raw.githubusercontent.com/ZenMX/mavenPublisher/master/publish.gradle'
+//    publishScript = './publish.gradle'
 
-    publishedGroupId = 'com.clevertap.android'
-    libraryName = 'CleverTapAndroidSDK'
-    artifact = 'clevertap-android-sdk'
-    libraryDescription = 'The CleverTap Android SDK'
-
-    siteUrl = 'https://github.com/CleverTap/clevertap-android-sdk'
-    gitUrl = 'https://github.com/CleverTap/clevertap-android-sdk.git'
-
-    libraryVersion = '3.5.1'
-
-    developerId = 'clevertap'
-    developerName = 'CleverTap'
-    developerEmail = 'support@clevertap.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
+//    bintrayRepo = 'Maven'
+//    bintrayName = 'CleverTapAndroidSDK'
+//    org = 'clevertap'
+//
+//    publishedGroupId = 'com.clevertap.android'
+//    libraryName = 'CleverTapAndroidSDK'
+//    artifact = 'clevertap-android-sdk'
+//    libraryDescription = 'The CleverTap Android SDK'
+//
+//    siteUrl = 'https://github.com/CleverTap/clevertap-android-sdk'
+//    gitUrl = 'https://github.com/CleverTap/clevertap-android-sdk.git'
+//
+//    libraryVersion = '3.5.1'
+//
+//    developerId = 'clevertap'
+//    developerName = 'CleverTap'
+//    developerEmail = 'support@clevertap.com'
+//
+//    licenseName = 'The Apache Software License, Version 2.0'
+//    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//    allLicenses = ["Apache-2.0"]
 }
 
 version = libraryVersion
@@ -72,68 +84,6 @@ android {
     }
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-    pkg {
-        repo = bintrayRepo
-        name = bintrayName
-        userOrg = org
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = allLicenses
-        publish = true
-        publicDownloadNumbers = true
-        version {
-            desc = libraryDescription
-        }
-    }
-}
-
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                groupId publishedGroupId
-                artifactId artifact
-
-                // Add your description here
-                name libraryName
-                description libraryDescription
-                url siteUrl
-
-                // Set your license
-                licenses {
-                    license {
-                        name licenseName
-                        url licenseUrl
-                    }
-                }
-                developers {
-                    developer {
-                        id developerId
-                        name developerName
-                        email developerEmail
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-
-                }
-            }
-        }
-    }
-}
 dependencies {
     compileOnly files('libs/play-services-base-9.8.0.jar')
     compileOnly files('libs/play-services-basement-9.8.0.jar')
@@ -150,14 +100,6 @@ dependencies {
     compileOnly 'com.android.support:design:28.0.0'
     compileOnly 'com.github.bumptech.glide:glide:4.9.0'
 
-
 }
 
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-artifacts {
-    archives sourcesJar
-}
+apply from: "${publishScript}"
