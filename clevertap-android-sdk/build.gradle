@@ -5,8 +5,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.google.gms:google-services:4.2.0'
     }
 }
@@ -16,36 +14,22 @@ repositories {
     jcenter()
 }
 
+def getBuildNumber() {
+    return System.getenv("BUILD_NUMBER") as Integer ?: 0
+}
+//com.clevertap.android:clevertap-android-sdk:3.4.2
 ext {
-    bintrayRepo = 'Maven'
-    bintrayName = 'CleverTapAndroidSDK'
-    org = 'clevertap'
 
-    publishedGroupId = 'com.clevertap.android'
-    libraryName = 'CleverTapAndroidSDK'
-    artifact = 'clevertap-android-sdk'
-    libraryDescription = 'The CleverTap Android SDK'
-
-    siteUrl = 'https://github.com/CleverTap/clevertap-android-sdk'
-    gitUrl = 'https://github.com/CleverTap/clevertap-android-sdk.git'
-
-    libraryVersion = '3.4.2'
-
-    developerId = 'clevertap'
-    developerName = 'CleverTap'
-    developerEmail = 'support@clevertap.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
+    publishGroupId = 'com.clevertap.android.mx'
+    publishVersion = "3.4.2.${getBuildNumber()}"
+    publishVersionCode = 342
+    publishUrlSnapshot = 'http://mx.git.com:8098/nexus/content/repositories/snapshots/'
+    publishUrlRelease = 'http://mx.git.com:8098/nexus/content/repositories/releases/'
+    publishScript = 'https://raw.githubusercontent.com/ZenMX/mavenPublisher/master/publish.gradle'
+//    publishScript = './publish.gradle'
 }
 
-version = libraryVersion
-group = publishedGroupId
-
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 28
@@ -72,68 +56,6 @@ android {
     }
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    configurations = ['archives']
-    pkg {
-        repo = bintrayRepo
-        name = bintrayName
-        userOrg = org
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = allLicenses
-        publish = true
-        publicDownloadNumbers = true
-        version {
-            desc = libraryDescription
-        }
-    }
-}
-
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                groupId publishedGroupId
-                artifactId artifact
-
-                // Add your description here
-                name libraryName
-                description libraryDescription
-                url siteUrl
-
-                // Set your license
-                licenses {
-                    license {
-                        name licenseName
-                        url licenseUrl
-                    }
-                }
-                developers {
-                    developer {
-                        id developerId
-                        name developerName
-                        email developerEmail
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-
-                }
-            }
-        }
-    }
-}
 dependencies {
     compileOnly files('libs/play-services-base-9.8.0.jar')
     compileOnly files('libs/play-services-basement-9.8.0.jar')
@@ -152,11 +74,4 @@ dependencies {
 
 }
 
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-artifacts {
-    archives sourcesJar
-}
+apply from: "${publishScript}"
