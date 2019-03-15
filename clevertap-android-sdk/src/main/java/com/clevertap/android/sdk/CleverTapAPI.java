@@ -5640,6 +5640,9 @@ public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationList
                 .setStyle(style)
                 .setPriority(priorityInt)
                 .setSmallIcon(smallIcon);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            nb.setColor(Color.parseColor("#2196F3"));
+        }
 
         nb.setLargeIcon(Utils.getNotificationBitmap(icoPath, true, context));
 
