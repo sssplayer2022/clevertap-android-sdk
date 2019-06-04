@@ -22,8 +22,8 @@ def getBuildNumber() {
 //com.clevertap.android:clevertap-android-sdk:3.4.2
 ext {
     publishGroupId = 'com.clevertap.android.mx'
-    publishVersion = "3.4.2.${getBuildNumber()}"
-    publishVersionCode = 342
+    publishVersion = "3.5.1.${getBuildNumber()}"
+    publishVersionCode = 351
     publishUrlSnapshot = 'http://mx.git.com:8098/nexus/content/repositories/snapshots/'
     publishUrlRelease = 'http://mx.git.com:8098/nexus/content/repositories/releases/'
     publishScript = 'https://raw.githubusercontent.com/ZenMX/mavenPublisher/master/publish.gradle'
@@ -52,8 +52,8 @@ ext {
 //    allLicenses = ["Apache-2.0"]
 }
 
-version = libraryVersion
-group = publishedGroupId
+//version = libraryVersion
+//group = publishedGroupId
 
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
