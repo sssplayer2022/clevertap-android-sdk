@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import static com.clevertap.android.sdk.CTPushNotificationReceiver.DEEPLINK_ACTIVITY;
+
 public class CTNotificationIntentService extends IntentService {
 
     public final static String MAIN_ACTION = "com.clevertap.PUSH_EVENT";
@@ -39,7 +41,17 @@ public class CTNotificationIntentService extends IntentService {
             Context context = getApplicationContext();
             Intent launchIntent;
             if (dl != null) {
-                launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dl));
+                try {
+                    Class<?> webLinkActivity = Class.forName(DEEPLINK_ACTIVITY);
+                    if (webLinkActivity == null) {
+                        return;
+                    }
+                    launchIntent = new Intent(context, webLinkActivity);
+                    launchIntent.setData(Uri.parse(dl));
+                } catch (Exception e) {
+                    return;
+                }
+//                launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dl));
             } else {
                 launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
             }
@@ -51,6 +63,7 @@ public class CTNotificationIntentService extends IntentService {
 
             launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+            launchIntent.putExtra(CTPushNotificationReceiver.FROM_CLEVERTAP, CTPushNotificationReceiver.CLEVERTAP_NOTIFICATION_CLICKED);
             launchIntent.putExtras(extras);
             launchIntent.removeExtra("dl");
 
