@@ -33,7 +33,7 @@ final class ManifestValidator {
             validateServiceInManifest((Application) context.getApplicationContext(), CTNotificationIntentService.class.getName());
             validateServiceInManifest((Application) context.getApplicationContext(), CTBackgroundJobService.class.getName());
             validateServiceInManifest((Application) context.getApplicationContext(), CTBackgroundIntentService.class.getName());
-            validateActivityInManifest((Application) context.getApplicationContext(), InAppNotificationActivity.class);
+//            validateActivityInManifest((Application) context.getApplicationContext(), a2.class);
         } catch (Exception e) {
             Logger.v("Receiver/Service issue : " + e.toString());
 

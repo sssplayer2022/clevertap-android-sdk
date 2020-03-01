@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * This class has all the parameters required to configure the styling of your {@link CTInboxActivity}
+ * This class has all the parameters required to configure the styling of your {@link a1}
  * All the setter methods are public and the object of this class is made immutable by {@link CleverTapAPI}
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
