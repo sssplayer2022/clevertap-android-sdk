@@ -350,8 +350,14 @@ public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationList
             }
 
             if (shouldProcess) {
-                if (notification != null && !notification.isEmpty() && notification.containsKey(Constants.NOTIFICATION_TAG)) {
-                    instance.pushNotificationClickedEvent(notification);
+                if (notification != null) {
+                    try {
+                        if (!notification.isEmpty() && notification.containsKey(Constants.NOTIFICATION_TAG)) {
+                            instance.pushNotificationClickedEvent(notification);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 if (deepLink != null) {
