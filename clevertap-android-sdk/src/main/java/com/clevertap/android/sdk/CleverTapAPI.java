@@ -96,18 +96,7 @@ import static com.clevertap.android.sdk.Utils.runOnUiThread;
  * <h1>CleverTapAPI</h1>
  * This is the main CleverTapAPI class that manages the SDK instances
  */
-//<<<<<<< HEAD
-public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationListener, CTABTestListener {
-//=======
-//public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationListener,
-//        InAppNotificationActivity.InAppActivityListener,
-//        CTInAppBaseFragment.InAppListener,
-//        CTInboxActivity.InboxActivityListener,
-//        CTABTestListener,
-//        FeatureFlagListener,
-//        CTProductConfigControllerListener,
-//        CTProductConfigListener {
-//>>>>>>> 3.8.2
+public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationListener, CTABTestListener, CTProductConfigListener, CTProductConfigControllerListener, FeatureFlagListener {
     private final HashMap<String, Object> notificationIdTagMap = new HashMap<>();
     private final HashMap<String, Object> notificationViewedIdTagMap = new HashMap<>();
 
@@ -379,37 +368,38 @@ public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationList
             for (String accountId : CleverTapAPI.instances.keySet()) {
                 CleverTapAPI instance = CleverTapAPI.instances.get(accountId);
 
-            boolean shouldProcess = false;
-            if (instance != null) {
-                shouldProcess = (_accountId == null && instance.config.isDefaultInstance()) || instance.getAccountId().equals(_accountId);
-            }
-            if (shouldProcess) {
-                if (notification != null) {
-                    try {
-                        if (!notification.isEmpty() && notification.containsKey(Constants.NOTIFICATION_TAG)) {
+                boolean shouldProcess = false;
+                if (instance != null) {
+                    shouldProcess = (_accountId == null && instance.config.isDefaultInstance()) || instance.getAccountId().equals(_accountId);
+                }
+                if (shouldProcess) {
+                    if (notification != null) {
+                        try {
+                            if (!notification.isEmpty() && notification.containsKey(Constants.NOTIFICATION_TAG)) {
+                                instance.pushNotificationClickedEvent(notification);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (shouldProcess) {
+                        if (notification != null && !notification.isEmpty() && notification.containsKey(Constants.NOTIFICATION_TAG)) {
                             instance.pushNotificationClickedEvent(notification);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
 
-                if (shouldProcess) {
-                    if (notification != null && !notification.isEmpty() && notification.containsKey(Constants.NOTIFICATION_TAG)) {
-                        instance.pushNotificationClickedEvent(notification);
-                    }
-
-                    if (deepLink != null) {
-                        try {
-                            instance.pushDeepLink(deepLink);
-                        } catch (Throwable t) {
-                            // no-op
+                        if (deepLink != null) {
+                            try {
+                                instance.pushDeepLink(deepLink);
+                            } catch (Throwable t) {
+                                // no-op
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
             }
-        }catch (Throwable t){
+        }catch(Throwable t){
             Logger.v("Throwable - " + t.getLocalizedMessage());
         }
     }
@@ -1358,7 +1348,7 @@ public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationList
         }
     }
 
-    //Deprecation warning because Google Play install referrer via intent will be deprecated in March 2020 
+    //Deprecation warning because Google Play install referrer via intent will be deprecated in March 2020
     @Deprecated
     static void handleInstallReferrer(Context context, Intent intent) {
         if (instances == null) {
@@ -7086,9 +7076,9 @@ public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationList
     }
 
     /**
-     * Opens {@link a1} to display Inbox Messages
+     * Opens {@link } to display Inbox Messages
      *
-     * @param styleConfig {@link CTInboxStyleConfig} configuration of various style parameters for the {@link a1}
+     * @param styleConfig {@link CTInboxStyleConfig} configuration of various style parameters for the {@link }
      */
     @SuppressWarnings({"unused", "WeakerAccess"})
     public void showAppInbox(CTInboxStyleConfig styleConfig) {
@@ -7123,7 +7113,7 @@ public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationList
     }
 
     /**
-     * Opens {@link a1} to display Inbox Messages with default {@link CTInboxStyleConfig} object
+     * Opens {@link } to display Inbox Messages with default {@link CTInboxStyleConfig} object
      */
     @SuppressWarnings({"unused"})
     public void showAppInbox() {
