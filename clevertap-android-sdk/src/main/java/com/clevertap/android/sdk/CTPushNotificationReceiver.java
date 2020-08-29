@@ -11,7 +11,7 @@ public class CTPushNotificationReceiver extends BroadcastReceiver {
     public static final String FROM_CLEVERTAP = "from_cleverTap";
     public static final String CLEVERTAP_NOTIFICATION_CLICKED = "clever_tap_notification_clicked";
     public final static String DEEPLINK_ACTIVITY = "com.mxtech.videoplayer.ad.online.mxexo.WebLinksRouterActivity";
-
+    private static Class<?> extraDeepLinkClz = null;
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -25,7 +25,10 @@ public class CTPushNotificationReceiver extends BroadcastReceiver {
 
             if (extras.containsKey(Constants.DEEP_LINK_KEY)){
                 try {
-                    Class<?> webLinkActivity = Class.forName(DEEPLINK_ACTIVITY);
+                    Class<?> webLinkActivity = extraDeepLinkClz;
+                    if (webLinkActivity == null) {
+                        webLinkActivity = Class.forName(DEEPLINK_ACTIVITY);
+                    }
                     if (webLinkActivity == null) {
                         return;
                     }
@@ -57,5 +60,9 @@ public class CTPushNotificationReceiver extends BroadcastReceiver {
         } catch (Throwable t) {
             Logger.v("CTPushNotificationReceiver: error handling notification", t);
         }
+    }
+
+    public static void setExtraDeepLinkClz(Class<?> extraDeepLinkClz) {
+        CTPushNotificationReceiver.extraDeepLinkClz = extraDeepLinkClz;
     }
 }
