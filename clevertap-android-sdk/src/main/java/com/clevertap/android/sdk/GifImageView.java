@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.support.v7.widget.AppCompatImageView;
 
+import com.clevertap.android.sdk.extras.CTAsyncTask;
+
 @SuppressWarnings({"unused"})
 class GifImageView extends AppCompatImageView implements Runnable {
 
@@ -17,7 +19,7 @@ class GifImageView extends AppCompatImageView implements Runnable {
     private boolean animating;
     private boolean renderFrame;
     private boolean shouldClear;
-    private Thread animationThread;
+    private CTAsyncTask animationTask;
     private OnFrameAvailable frameCallback = null;
     private long framesDisplayDuration = -1L;
     private OnAnimationStop animationStopCallback = null;
@@ -38,7 +40,7 @@ class GifImageView extends AppCompatImageView implements Runnable {
         public void run() {
             tmpBitmap = null;
             gifDecoder = null;
-            animationThread = null;
+            animationTask = null;
             shouldClear = false;
         }
     };
@@ -95,9 +97,9 @@ class GifImageView extends AppCompatImageView implements Runnable {
     public void stopAnimation() {
         animating = false;
 
-        if (animationThread != null) {
-            animationThread.interrupt();
-            animationThread = null;
+        if (animationTask != null) {
+            animationTask.interrupt();
+            animationTask = null;
         }
     }
 
@@ -123,7 +125,7 @@ class GifImageView extends AppCompatImageView implements Runnable {
     }
 
     private boolean canStart() {
-        return (animating || renderFrame) && gifDecoder != null && animationThread == null;
+        return (animating || renderFrame) && gifDecoder != null && animationTask == null;
     }
 
     public int getGifWidth() {
@@ -186,12 +188,12 @@ class GifImageView extends AppCompatImageView implements Runnable {
             } catch (final InterruptedException e) {
                 // suppress exception
             }
-        } while (animating);
+        } while (animating && animationTask != null && !animationTask.isCancelled());
 
         if (shouldClear) {
             handler.post(cleanupRunnable);
         }
-        animationThread = null;
+        animationTask = null;
 
         if (animationStopCallback != null) {
             animationStopCallback.onAnimationStop();
@@ -238,8 +240,8 @@ class GifImageView extends AppCompatImageView implements Runnable {
 
     private void startAnimationThread() {
         if (canStart()) {
-            animationThread = new Thread(this);
-            animationThread.start();
+            animationTask = new CTAsyncTask(this);
+            animationTask.start();
         }
     }
 

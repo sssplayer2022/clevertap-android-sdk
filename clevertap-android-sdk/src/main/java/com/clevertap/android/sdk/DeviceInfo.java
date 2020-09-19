@@ -20,6 +20,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static com.clevertap.android.sdk.extras.CleverTapExecutors.io;
+
 class DeviceInfo {
 
     private Context context;
@@ -46,13 +48,12 @@ class DeviceInfo {
         this.context = context;
         this.config = config;
         this.library = null;
-        Thread deviceInfoCacheThread = new Thread(new Runnable() {
+        io().execute(new Runnable() {
             @Override
             public void run() {
                 getDeviceCachedInfo();
             }
         });
-        deviceInfoCacheThread.start();
         initDeviceID(cleverTapID);
     }
 
@@ -124,7 +125,7 @@ class DeviceInfo {
 
         // fetch the googleAdID to generate GUID
         //has to be called on background thread
-        Thread generateGUIDFromAdIDThread = new Thread(new Runnable() {
+        io().execute(new Runnable() {
             @Override
             public void run() {
                 fetchGoogleAdID();
@@ -132,7 +133,6 @@ class DeviceInfo {
                 CleverTapAPI.instanceWithConfig(context,config).deviceIDCreated(getDeviceID());
             }
         });
-        generateGUIDFromAdIDThread.start();
     }
 
     void forceUpdateCustomCleverTapID(String cleverTapID){
