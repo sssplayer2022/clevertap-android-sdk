@@ -34,7 +34,7 @@ ext.deps = [
         'clevertapGeofence' : "com.clevertap.android:clevertap-geofence-sdk:$geofenceVersion",
         'clevertapXPS' : "com.clevertap.android:clevertap-xiaomi-sdk:$xpsVersion",
         'clevertapHMS' : "com.clevertap.android:clevertap-hms-sdk:$hmsVersion",
-        'pushTemplates' : "'com.clevertap.android:push-templates:$pushTemplatesVersion"
+        'pushTemplates' : "com.clevertap.android:push-templates:$pushTemplatesVersion"
 
 
 ]
