@@ -12,12 +12,13 @@ import com.clevertap.android.sdk.Utils;
 
 
 public class CTPushNotificationReceiver extends BroadcastReceiver {
-
+    private final static String DEEPLINK_ACTIVITY = "com.mxtech.videoplayer.ad.online.mxexo.WebLinksRouterActivity";
+    private static Class<?> extraDeepLinkClz = null;
     @Override
     public void onReceive(Context context, Intent intent) {
 
         try {
-            Intent launchIntent;
+            Intent launchIntent = null;
 
             Bundle extras = intent.getExtras();
             if (extras == null) {
@@ -25,10 +26,25 @@ public class CTPushNotificationReceiver extends BroadcastReceiver {
             }
 
             if (extras.containsKey(Constants.DEEP_LINK_KEY)) {
-                launchIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(intent.getStringExtra(Constants.DEEP_LINK_KEY)));
-                Utils.setPackageNameFromResolveInfoList(context, launchIntent);
-            } else {
+                try {
+                    Class<?> webLinkActivity = extraDeepLinkClz;
+                    try {
+                        if (webLinkActivity == null) {
+                            webLinkActivity = Class.forName(DEEPLINK_ACTIVITY);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (webLinkActivity != null) {
+                        launchIntent = new Intent(context, webLinkActivity);
+                        launchIntent.setData(Uri.parse(intent.getStringExtra(Constants.DEEP_LINK_KEY)));
+                        Utils.setPackageNameFromResolveInfoList(context, launchIntent);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (launchIntent == null) {
                 launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
                 if (launchIntent == null) {
                     return;
@@ -51,5 +67,9 @@ public class CTPushNotificationReceiver extends BroadcastReceiver {
         } catch (Throwable t) {
             Logger.v("CTPushNotificationReceiver: error handling notification", t);
         }
+    }
+
+    public static void setExtraDeepLinkClz(Class<?> extraDeepLinkClz) {
+        CTPushNotificationReceiver.extraDeepLinkClz = extraDeepLinkClz;
     }
 }
