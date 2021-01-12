@@ -3,24 +3,32 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'jacoco'
-
+def getBuildNumber() {
+    return System.getenv("BUILD_NUMBER") as Integer ?: 0
+}
 ext {
-    bintrayRepo = 'Maven'
-    bintrayName = libraryName
-    org = 'clevertap'
-
-    publishedGroupId = 'com.clevertap.android'
-
-    siteUrl = 'https://github.com/CleverTap/clevertap-android-sdk'
-    gitUrl = 'https://github.com/CleverTap/clevertap-android-sdk.git'
-
-    developerId = 'clevertap'
-    developerName = 'CleverTap'
-    developerEmail = 'support@clevertap.com'
+    publishGroupId = 'com.clevertap.android.mx'
+    publishVersion = "4.0.2.${getBuildNumber()}"
+    publishVersionCode = 365
+    publishUrlSnapshot = 'http://mx.git.com:8098/nexus/content/repositories/snapshots/'
+    publishUrlRelease = 'http://mx.git.com:8098/nexus/content/repositories/releases/'
+    publishScript = 'https://raw.githubusercontent.com/ZenMX/mavenPublisher/master/publish.gradle'
+//    bintrayRepo = 'Maven'
+//    bintrayName = libraryName
+//    org = 'clevertap'
+//
+//    publishGroupId = 'com.clevertap.android'
+//
+//    siteUrl = 'https://github.com/CleverTap/clevertap-android-sdk'
+//    gitUrl = 'https://github.com/CleverTap/clevertap-android-sdk.git'
+//
+//    developerId = 'clevertap'
+//    developerName = 'CleverTap'
+//    developerEmail = 'support@clevertap.com'
 }
 
-version = libraryVersion
-group = publishedGroupId
+version = publishVersion
+group = publishGroupId
 
 def (major,minor,patch) = libraryVersion.split("\\.")
 
@@ -42,11 +50,11 @@ android {
         debug {
             testCoverageEnabled true //To get coverage reports for instrumentation tests
             buildConfigField "String", "SDK_VERSION_STRING",
-                    "\"!SDK-VERSION-STRING!:$publishedGroupId:$artifact:$major.$minor.$patch.0\""
+                    "\"!SDK-VERSION-STRING!:$publishGroupId:$artifact:$major.$minor.$patch.0\""
         }
         release {
             buildConfigField "String", "SDK_VERSION_STRING",
-                    "\"!SDK-VERSION-STRING!:$publishedGroupId:$artifact:$major.$minor.$patch.0\""
+                    "\"!SDK-VERSION-STRING!:$publishGroupId:$artifact:$major.$minor.$patch.0\""
             minifyEnabled false// keep it false we will supply proguard through consumerProguardFiles
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -109,65 +117,65 @@ if (project.rootProject.file('local.properties').exists()) {
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
 }
 
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+//bintray {
+//    user = properties.getProperty("bintray.user")
+//    key = properties.getProperty("bintray.apikey")
+//
+//    configurations = ['archives']
+//    pkg {
+//        repo = bintrayRepo
+//        name = bintrayName
+//        userOrg = org
+//        desc = libraryDescription
+//        websiteUrl = siteUrl
+//        vcsUrl = gitUrl
+//        licenses = allLicenses
+//        publish = true
+//        publicDownloadNumbers = true
+//        version {
+//            desc = libraryDescription
+//        }
+//    }
+//}
 
-    configurations = ['archives']
-    pkg {
-        repo = bintrayRepo
-        name = bintrayName
-        userOrg = org
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = allLicenses
-        publish = true
-        publicDownloadNumbers = true
-        version {
-            desc = libraryDescription
-        }
-    }
-}
-
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                groupId publishedGroupId
-                artifactId artifact
-
-                // Add your description here
-                name libraryName
-                description libraryDescription
-                url siteUrl
-
-                // Set your license
-                licenses {
-                    license {
-                        name licenseName
-                        url licenseUrl
-                    }
-                }
-                developers {
-                    developer {
-                        id developerId
-                        name developerName
-                        email developerEmail
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-
-                }
-            }
-        }
-    }
-}
+//install {
+//    repositories.mavenInstaller {
+//        // This generates POM.xml with proper parameters
+//        pom {
+//            project {
+//                packaging 'aar'
+//                groupId publishGroupId
+//                artifactId artifact
+//
+//                // Add your description here
+//                name libraryName
+//                description libraryDescription
+//                url siteUrl
+//
+//                // Set your license
+//                licenses {
+//                    license {
+//                        name licenseName
+//                        url licenseUrl
+//                    }
+//                }
+//                developers {
+//                    developer {
+//                        id developerId
+//                        name developerName
+//                        email developerEmail
+//                    }
+//                }
+//                scm {
+//                    connection gitUrl
+//                    developerConnection gitUrl
+//                    url siteUrl
+//
+//                }
+//            }
+//        }
+//    }
+//}
 
 task sourcesJar(type: Jar) {
     baseName "$artifact"
@@ -178,3 +186,4 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives sourcesJar
 }
+apply from: "${publishScript}"
