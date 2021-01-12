@@ -7,6 +7,8 @@ import androidx.annotation.RequiresApi;
 import com.clevertap.android.sdk.CleverTapAPI;
 import com.clevertap.android.sdk.Logger;
 
+import static com.clevertap.android.sdk.extras.CleverTapExecutors.io;
+
 /**
  * Background Job service to sync up for new notifications
  */
@@ -16,13 +18,13 @@ public class CTBackgroundJobService extends JobService {
     @Override
     public boolean onStartJob(final JobParameters params) {
         Logger.v("Job Service is starting");
-        new Thread(new Runnable() {
+        io().execute(new Runnable() {
             @Override
             public void run() {
                 CleverTapAPI.runJobWork(getApplicationContext(), params);
                 jobFinished(params, true);
             }
-        }).start();
+        });
         return true;
     }
 

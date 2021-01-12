@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.clevertap.android.sdk.extras.CTAsyncTask;
+
 @SuppressWarnings({"unused"})
 class GifImageView extends AppCompatImageView implements Runnable {
 
@@ -33,7 +35,7 @@ class GifImageView extends AppCompatImageView implements Runnable {
 
     private OnAnimationStop animationStopCallback = null;
 
-    private Thread animationThread;
+    private CTAsyncTask animationThread;
 
     private OnFrameAvailable frameCallback = null;
 
@@ -195,7 +197,7 @@ class GifImageView extends AppCompatImageView implements Runnable {
             } catch (final InterruptedException e) {
                 // suppress exception
             }
-        } while (animating);
+        } while (animating && animationThread != null && !animationThread.isCancelled());
 
         if (shouldClear) {
             handler.post(cleanupRunnable);
@@ -254,7 +256,7 @@ class GifImageView extends AppCompatImageView implements Runnable {
 
     private void startAnimationThread() {
         if (canStart()) {
-            animationThread = new Thread(this);
+            animationThread = new CTAsyncTask(this);
             animationThread.start();
         }
     }
