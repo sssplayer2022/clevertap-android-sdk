@@ -34,4 +34,5 @@ dependencies {
     testImplementation deps.androidXCoreKTX
     testImplementation deps.kotlinStdlib
     testImplementation deps.firebaseMessaging
+    implementation deps.pushTemplates
 }
