@@ -64,15 +64,15 @@ android {
         abortOnError false
     }
 
-    libraryVariants.all { variant ->
-        variant.outputs.all {
-            if (variant.getName().toLowerCase().contains('release')) {
-                outputFileName = "${artifact}-${libraryVersion}.aar"
-            } else if (variant.getName().toLowerCase().contains('debug')) {
-                outputFileName = "${artifact}-${variant.name}-${libraryVersion}.aar"
-            }
-        }
-    }
+//    libraryVariants.all { variant ->
+//        variant.outputs.all {
+//            if (variant.getName().toLowerCase().contains('release')) {
+//                outputFileName = "${artifact}-${libraryVersion}.aar"
+//            } else if (variant.getName().toLowerCase().contains('debug')) {
+//                outputFileName = "${artifact}-${variant.name}-${libraryVersion}.aar"
+//            }
+//        }
+//    }
 
     testOptions {
         animationsDisabled true
@@ -138,21 +138,21 @@ if (project.rootProject.file('local.properties').exists()) {
 //    }
 //}
 
-//install {
-//    repositories.mavenInstaller {
-//        // This generates POM.xml with proper parameters
-//        pom {
-//            project {
-//                packaging 'aar'
-//                groupId publishGroupId
-//                artifactId artifact
-//
-//                // Add your description here
-//                name libraryName
-//                description libraryDescription
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId publishGroupId
+                artifactId artifact
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
 //                url siteUrl
-//
-//                // Set your license
+
+                // Set your license
 //                licenses {
 //                    license {
 //                        name licenseName
@@ -170,12 +170,12 @@ if (project.rootProject.file('local.properties').exists()) {
 //                    connection gitUrl
 //                    developerConnection gitUrl
 //                    url siteUrl
-//
+
 //                }
-//            }
-//        }
-//    }
-//}
+            }
+        }
+    }
+}
 
 task sourcesJar(type: Jar) {
     baseName "$artifact"
