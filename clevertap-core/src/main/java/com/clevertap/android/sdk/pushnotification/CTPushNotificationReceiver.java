@@ -12,7 +12,9 @@ import com.clevertap.android.sdk.Utils;
 
 
 public class CTPushNotificationReceiver extends BroadcastReceiver {
-    private final static String DEEPLINK_ACTIVITY = "com.mxtech.videoplayer.ad.online.mxexo.WebLinksRouterActivity";
+    public static final String DEEPLINK_ACTIVITY = "com.mxtech.videoplayer.ad.online.mxexo.WebLinksRouterActivity";
+    public static final String FROM_CLEVERTAP = "from_cleverTap";
+    public static final String CLEVERTAP_NOTIFICATION_CLICKED = "clever_tap_notification_clicked";
     private static Class<?> extraDeepLinkClz = null;
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -46,16 +48,16 @@ public class CTPushNotificationReceiver extends BroadcastReceiver {
             }
             if (launchIntent == null) {
                 launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-                if (launchIntent == null) {
-                    return;
-                }
+            }
+            if (launchIntent == null) {
+                return;
             }
 
             CleverTapAPI.handleNotificationClicked(context, extras);
 
             launchIntent.setFlags(
                     Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
+            launchIntent.putExtra(FROM_CLEVERTAP, CLEVERTAP_NOTIFICATION_CLICKED);
             launchIntent.putExtras(extras);
 
             //to prevent calling of pushNotificationClickedEvent(extras) in ActivityLifecycleCallback
@@ -71,5 +73,9 @@ public class CTPushNotificationReceiver extends BroadcastReceiver {
 
     public static void setExtraDeepLinkClz(Class<?> extraDeepLinkClz) {
         CTPushNotificationReceiver.extraDeepLinkClz = extraDeepLinkClz;
+    }
+
+    public static Class<?> getExtraDeepLinkClz() {
+        return extraDeepLinkClz;
     }
 }

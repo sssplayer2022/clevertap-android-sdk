@@ -6,8 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import com.clevertap.android.sdk.Constants;
 import com.clevertap.android.sdk.Logger;
 import com.clevertap.android.sdk.Utils;
+
+import static com.clevertap.android.sdk.pushnotification.CTPushNotificationReceiver.DEEPLINK_ACTIVITY;
 
 public class CTNotificationIntentService extends IntentService {
 
@@ -42,11 +46,27 @@ public class CTNotificationIntentService extends IntentService {
             String dl = extras.getString("dl");
 
             Context context = getApplicationContext();
-            Intent launchIntent;
+            Intent launchIntent = null;
             if (dl != null) {
-                launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(dl));
-                Utils.setPackageNameFromResolveInfoList(context, launchIntent);
-            } else {
+                try {
+                    Class<?> webLinkActivity = CTPushNotificationReceiver.getExtraDeepLinkClz();
+                    try {
+                        if (webLinkActivity == null) {
+                            webLinkActivity = Class.forName(DEEPLINK_ACTIVITY);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (webLinkActivity != null) {
+                        launchIntent = new Intent(context, webLinkActivity);
+                        launchIntent.setData(Uri.parse(dl));
+                        Utils.setPackageNameFromResolveInfoList(context, launchIntent);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (launchIntent == null) {
                 launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
             }
 
@@ -57,7 +77,7 @@ public class CTNotificationIntentService extends IntentService {
 
             launchIntent.setFlags(
                     Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
+            launchIntent.putExtra(CTPushNotificationReceiver.FROM_CLEVERTAP, CTPushNotificationReceiver.CLEVERTAP_NOTIFICATION_CLICKED);
             launchIntent.putExtras(extras);
             launchIntent.removeExtra("dl");
 
