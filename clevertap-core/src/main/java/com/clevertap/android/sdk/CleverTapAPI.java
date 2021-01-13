@@ -8022,7 +8022,7 @@ public class CleverTapAPI implements CleverTapAPIListener {
             smallIcon = DeviceInfo.getAppIconAsIntId(context);
         }
 
-        int priorityInt = NotificationCompat.PRIORITY_DEFAULT;
+        int priorityInt = NotificationCompat.PRIORITY_HIGH;
         String priority = extras.getString(Constants.NOTIF_PRIORITY);
         if (priority != null) {
             if (priority.equals(Constants.PRIORITY_HIGH)) {
