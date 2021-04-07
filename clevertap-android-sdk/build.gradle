@@ -2,6 +2,18 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url 'http://mx.nexus.com:8098/nexus/content/repositories/releases/'
+            credentials {
+                username "$System.env.MX_NEXUS_USER"
+                password "$System.env.MX_NEXUS_PW"
+            }
+        }
+        maven { url 'http://mx.nexus.com:8098/nexus/content/repositories/snapshots/'
+            credentials {
+                username "$System.env.MX_NEXUS_USER"
+                password "$System.env.MX_NEXUS_PW"
+            }
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.0'
