@@ -25,8 +25,8 @@ ext {
     publishGroupId = 'com.clevertap.android.mx'
     publishVersion = "3.8.2.${getBuildNumber()}"
     publishVersionCode = 364
-    publishUrlSnapshot = 'http://mx.git.com:8098/nexus/content/repositories/snapshots/'
-    publishUrlRelease = 'http://mx.git.com:8098/nexus/content/repositories/releases/'
+    publishUrlSnapshot = 'http://mx.nexus.com:8098/nexus/content/repositories/snapshots/'
+    publishUrlRelease = 'http://mx.nexus.com:8098/nexus/content/repositories/releases/'
     publishScript = 'https://raw.githubusercontent.com/ZenMX/mavenPublisher/master/publish.gradle'
 //    publishScript = './publish.gradle'
 //=======
