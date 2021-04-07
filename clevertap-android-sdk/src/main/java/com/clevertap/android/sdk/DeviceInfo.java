@@ -615,7 +615,7 @@ class DeviceInfo {
             if (mTelephonyManager == null) {
                 return null;
             }
-            int networkType = mTelephonyManager.getNetworkType();
+            int networkType = Utils.getPhoneNetworkType(context);
             switch (networkType) {
                 case TelephonyManager.NETWORK_TYPE_GPRS:
                 case TelephonyManager.NETWORK_TYPE_EDGE:

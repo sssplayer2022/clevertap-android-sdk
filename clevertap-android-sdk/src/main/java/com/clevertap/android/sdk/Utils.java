@@ -88,11 +88,7 @@ public final class Utils {
             }
 
             // Fall back to network type
-            TelephonyManager teleMan = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            if (teleMan == null) {
-                return "Unavailable";
-            }
-            int networkType = teleMan.getNetworkType();
+            int networkType = getPhoneNetworkType(context);
             switch (networkType) {
                 case TelephonyManager.NETWORK_TYPE_CDMA:
                     return "CDMA";
@@ -113,6 +109,19 @@ public final class Utils {
             }
         } catch (Throwable t) {
             return "Unavailable";
+        }
+    }
+
+    public static int getPhoneNetworkType(Context context) {
+        TelephonyManager teleMan = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (teleMan == null) {
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
+        }
+        try {
+            return teleMan.getNetworkType();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            return TelephonyManager.NETWORK_TYPE_UNKNOWN;
         }
     }
 
