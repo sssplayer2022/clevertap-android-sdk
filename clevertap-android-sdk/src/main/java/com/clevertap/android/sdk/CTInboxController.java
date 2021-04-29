@@ -1,5 +1,7 @@
 package com.clevertap.android.sdk;
 
+import android.text.TextUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -165,7 +167,8 @@ class CTInboxController {
         synchronized (messagesLock) {
             ArrayList<CTMessageDAO> messages = getMessages();
             for (CTMessageDAO message: messages) {
-                if (message.isRead() == 0) {
+                // Message Unread and Message has least one Tag
+                if (message.isRead() == 0 && !TextUtils.isEmpty(message.getTags())) {
                     unread.add(message);
                 }
             }
