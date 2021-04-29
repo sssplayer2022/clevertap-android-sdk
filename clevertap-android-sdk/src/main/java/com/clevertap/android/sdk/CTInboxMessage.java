@@ -206,7 +206,7 @@ public class CTInboxMessage implements Parcelable {
         return isRead;
     }
 
-    void setRead(boolean read) {
+    public void setRead(boolean read) {
         isRead = read;
     }
 

@@ -450,4 +450,22 @@ public class CTInboxMessageContent implements Parcelable {
         String contentType = this.getContentType();
         return contentType != null && this.media != null && contentType.startsWith("audio");
     }
+
+    /**
+     * Returns hasLinks of the inbox message
+     *
+     * @return boolean
+     */
+    public boolean hasLinks() {
+        return hasLinks;
+    }
+
+    /**
+     * Returns hasUrl of the inbox message
+     *
+     * @return boolean
+     */
+    public boolean hasUrl() {
+        return hasUrl;
+    }
 }
