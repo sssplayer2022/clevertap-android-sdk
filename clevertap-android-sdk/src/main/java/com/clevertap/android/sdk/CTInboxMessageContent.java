@@ -80,7 +80,6 @@ public class CTInboxMessageContent implements Parcelable {
             JSONObject actionObject = contentObject.has(Constants.KEY_ACTION) ? contentObject.getJSONObject(Constants.KEY_ACTION) : null;
             if (actionObject != null) {
                 this.hasUrl = actionObject.has(Constants.KEY_HAS_URL) && actionObject.getBoolean(Constants.KEY_HAS_URL);
-                this.hasLinks = actionObject.has(Constants.KEY_HAS_LINKS) && actionObject.getBoolean(Constants.KEY_HAS_LINKS);
                 JSONObject urlObject = actionObject.has(Constants.KEY_URL) ? actionObject.getJSONObject(Constants.KEY_URL) : null;
                 if (urlObject != null && this.hasUrl) {
                     JSONObject androidObject = urlObject.has(Constants.KEY_ANDROID) ? urlObject.getJSONObject(Constants.KEY_ANDROID) : null;
@@ -88,13 +87,17 @@ public class CTInboxMessageContent implements Parcelable {
                         this.actionUrl = androidObject.has(Constants.KEY_TEXT) ? androidObject.getString(Constants.KEY_TEXT) : "";
                     }
                 }
-                if (urlObject != null && this.hasLinks) {
-                    this.links = actionObject.has(Constants.KEY_LINKS) ? actionObject.getJSONArray(Constants.KEY_LINKS) : null;
-                    if (links != null && links.length() > 0) {
-                        JSONObject linkObject = links.getJSONObject(0);
-                        JSONObject androidLinkObject = linkObject.has(Constants.KEY_ANDROID) ? linkObject.getJSONObject(Constants.KEY_ANDROID) : null;
-                        if (androidLinkObject != null) {
-                            this.linkUrl = androidLinkObject.has(Constants.KEY_TEXT) ? androidLinkObject.getString(Constants.KEY_TEXT) : "";
+                this.hasLinks = actionObject.has(Constants.KEY_HAS_LINKS) && actionObject.getBoolean(Constants.KEY_HAS_LINKS);
+                this.links = actionObject.has(Constants.KEY_LINKS) ? actionObject.getJSONArray(Constants.KEY_LINKS) : null;
+                if (this.hasLinks && links != null && links.length() > 0) {
+                    JSONObject linkObject = links.getJSONObject(0);
+                    if (linkObject != null){
+                        JSONObject linkUrlObject = linkObject.has(Constants.KEY_URL) ? linkObject.getJSONObject(Constants.KEY_URL) : null;
+                        if (linkUrlObject != null) {
+                            JSONObject linkAndroidObject = linkUrlObject.has(Constants.KEY_ANDROID) ? linkUrlObject.getJSONObject(Constants.KEY_ANDROID) : null;
+                            if (linkAndroidObject != null) {
+                                this.linkUrl = linkAndroidObject.has(Constants.KEY_TEXT) ? linkAndroidObject.getString(Constants.KEY_TEXT) : "";
+                            }
                         }
                     }
                 }
