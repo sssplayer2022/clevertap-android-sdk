@@ -29,6 +29,7 @@ public class CTInboxMessageContent implements Parcelable {
     private JSONArray links;
     private String contentType;
     private String posterUrl;
+    private String linkUrl;
 
     CTInboxMessageContent() {
     }
@@ -50,6 +51,7 @@ public class CTInboxMessageContent implements Parcelable {
         }
         contentType = in.readString();
         posterUrl = in.readString();
+        linkUrl = in.readString();
     }
 
     CTInboxMessageContent initWithJSON(JSONObject contentObject) {
@@ -88,6 +90,13 @@ public class CTInboxMessageContent implements Parcelable {
                 }
                 if (urlObject != null && this.hasLinks) {
                     this.links = actionObject.has(Constants.KEY_LINKS) ? actionObject.getJSONArray(Constants.KEY_LINKS) : null;
+                    if (links != null && links.length() > 0) {
+                        JSONObject linkObject = links.getJSONObject(0);
+                        JSONObject androidLinkObject = linkObject.has(Constants.KEY_ANDROID) ? linkObject.getJSONObject(Constants.KEY_ANDROID) : null;
+                        if (androidLinkObject != null) {
+                            this.linkUrl = androidLinkObject.has(Constants.KEY_TEXT) ? androidLinkObject.getString(Constants.KEY_TEXT) : "";
+                        }
+                    }
                 }
             }
 
@@ -121,6 +130,7 @@ public class CTInboxMessageContent implements Parcelable {
         }
         dest.writeString(contentType);
         dest.writeString(posterUrl);
+        dest.writeString(linkUrl);
     }
 
     @SuppressWarnings("unused")
@@ -186,6 +196,19 @@ public class CTInboxMessageContent implements Parcelable {
 
     void setActionUrl(String actionUrl) {
         this.actionUrl = actionUrl;
+    }
+
+    /**
+     * Return the link URL of the body of the inbox message
+     *
+     * @return String
+     */
+    public String getLinkUrl() {
+        return linkUrl;
+    }
+
+    void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
     }
 
     /**
