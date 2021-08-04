@@ -81,7 +81,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -130,6 +129,7 @@ public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationList
 
     private CTProductConfigController ctProductConfigController;
     private boolean isProductConfigRequested;
+    private long videoSuggestionsGroup = 1000L;
 
     // Initialize
     private CleverTapAPI(final Context context, final CleverTapInstanceConfig config, String cleverTapID) {
@@ -6296,8 +6296,10 @@ public class CleverTapAPI implements CTInAppNotification.CTInAppNotificationList
         NotificationCompat.Builder nb;
         if (requiresChannelId) {
             nb = new NotificationCompat.Builder(context, channelId);
-            nb.setGroup(String.valueOf(UUID.randomUUID()));
-            nb.setGroupSummary(true);
+            if ("topic_video_suggestions".equals(channelId)) {
+                nb.setGroup(String.valueOf(videoSuggestionsGroup++));
+                nb.setGroupSummary(true);
+            }
 
             // choices here are Notification.BADGE_ICON_NONE = 0, Notification.BADGE_ICON_SMALL = 1, Notification.BADGE_ICON_LARGE = 2.  Default is  Notification.BADGE_ICON_LARGE
             String badgeIconParam = extras.getString(Constants.WZRK_BADGE_ICON, null);
