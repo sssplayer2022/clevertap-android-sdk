@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- cheat the gradlew to compile project for clevertap templattes 0.0.5 can't find the attrs below. -->
+    <declare-styleable name="PlayerView">
+        <attr format="boolean" name="auto_show"/>
+        <attr format="reference" name="controller_layout_id"/>
+        <attr format="enum" name="show_buffering">
+            <enum name="never" value="0"/>
+            <enum name="when_playing" value="1"/>
+            <enum name="always" value="2"/>
+        </attr>
+        <attr format="boolean" name="use_controller"/>
+    </declare-styleable>
+</resources>
