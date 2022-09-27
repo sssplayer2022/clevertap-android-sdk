@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 
 import static com.clevertap.android.sdk.CTPushNotificationReceiver.DEEPLINK_ACTIVITY;
 
@@ -75,7 +78,9 @@ public class CTNotificationIntentService extends IntentService {
                 }
 
             }
-            sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)); // close the notification drawer
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)); // close the notification drawer
+            }
             startActivity(launchIntent);
         } catch (Throwable t) {
             Logger.v("CTNotificationService: unable to process action button click:  "+ t.getLocalizedMessage());
