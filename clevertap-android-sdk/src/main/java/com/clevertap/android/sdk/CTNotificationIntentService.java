@@ -78,7 +78,7 @@ public class CTNotificationIntentService extends IntentService {
                 }
 
             }
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
                 sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)); // close the notification drawer
             }
             startActivity(launchIntent);
