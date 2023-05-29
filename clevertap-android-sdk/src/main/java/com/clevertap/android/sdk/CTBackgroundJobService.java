@@ -3,7 +3,7 @@ package com.clevertap.android.sdk;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import static com.clevertap.android.sdk.extras.CleverTapExecutors.io;
 

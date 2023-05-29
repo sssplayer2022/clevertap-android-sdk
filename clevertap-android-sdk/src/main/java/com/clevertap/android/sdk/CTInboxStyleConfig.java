@@ -2,7 +2,7 @@ package com.clevertap.android.sdk;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.design.widget.TabLayout;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;

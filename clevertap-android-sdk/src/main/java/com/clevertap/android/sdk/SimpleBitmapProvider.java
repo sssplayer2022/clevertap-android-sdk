@@ -1,7 +1,7 @@
 package com.clevertap.android.sdk;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class SimpleBitmapProvider implements GifDecoder.BitmapProvider {
 
