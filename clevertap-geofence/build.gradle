@@ -1,0 +1,57 @@
+import static de.fayard.refreshVersions.core.Versions.versionFor
+ext {
+    libraryName = 'GeofenceSDK'
+    artifact = 'clevertap-geofence-sdk'
+    libraryDescription = 'The CleverTap Android Geofence SDK'
+
+    libraryVersion = versionFor("version.com.clevertap.android..clevertap-geofence-sdk")
+
+    licenseName = 'MIT License'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+    minSdkVersionVal = Android.minSdkVersionVal
+}
+
+apply from: "../gradle-scripts/commons.gradle"
+
+dependencies {
+    compileOnly project(':clevertap-core')
+    compileOnly Libs.play_services_location
+    compileOnly Libs.work_runtime
+    compileOnly Libs.concurrent_futures
+
+    // Unit testing dependencies
+    testImplementation Libs.junit_platform_runner
+    testImplementation Libs.junit_jupiter_api
+    testRuntimeOnly Libs.junit_jupiter_engine
+
+    testImplementation Libs.mockito_core
+    testImplementation Libs.robolectric
+
+    testImplementation Libs.androidx_test_core
+    testImplementation Libs.androidx_test_ext_junit
+    testImplementation Libs.appcompat
+    testImplementation Libs.firebase_messaging
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation Libs.androidx_test_runner
+    androidTestImplementation Libs.androidx_test_rules
+    androidTestImplementation Libs.espresso_core
+
+    testImplementation Libs.powermock_core
+    testImplementation Libs.powermock_module_junit4
+    testImplementation Libs.powermock_module_junit4_rule
+    testImplementation Libs.powermock_api_mockito2
+    testImplementation Libs.powermock_classloading_xstream
+    testImplementation Libs.catch_exception
+    testImplementation project(':clevertap-core')
+
+    testImplementation Libs.installreferrer
+    testImplementation Libs.play_services_location
+    testImplementation Libs.jsonassert
+    testImplementation Libs.work_testing
+    testImplementation Libs.awaitility
+    testImplementation Libs.concurrent_futures
+    testImplementation Libs.core_ktx
+    testImplementation Libs.kotlin_stdlib_jdk7
+}

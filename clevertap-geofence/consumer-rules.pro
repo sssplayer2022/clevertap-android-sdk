@@ -1,0 +1,3 @@
+-keep class com.google.android.gms.common.GooglePlayServicesUtil{*;}
+-keep class com.google.android.gms.location.FusedLocationProviderClient{*;}
+-keep class androidx.concurrent.futures.CallbackToFutureAdapter{*;}

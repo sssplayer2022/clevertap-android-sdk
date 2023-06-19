@@ -3,9 +3,12 @@
 local.properties
 bin
 gen
-docs
 *.iml
 .idea
 build/
 .gradle/
-gradle/
+*.exec
+sample/google-services.json
+ct_signing_key.gpg
+/sample/release/sample-release.aab
+/sample/libs/

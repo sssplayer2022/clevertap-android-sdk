@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion Android.compileSdkVersionVal
+    buildToolsVersion Android.buildToolsVersionVal
+
+    defaultConfig {
+        minSdkVersion Android.minSdkVersionVal
+        targetSdkVersion Android.targetSdkVersionVal
+        versionCode 1
+        versionName "1.0"
+
+//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    api project(':clevertap-core')
+    // Unit ing dependencies
+    api Libs.junit_platform_runner
+    api Libs.junit_jupiter_api
+    api Libs.junit_jupiter_engine
+    api Libs.kotlin_stdlib_jdk7
+    api Libs.jsonassert
+    api Libs.gson
+    def mockito_version = '3.5.11'
+    api Libs.mockito_core
+    api "org.mockito:mockito-inline:$mockito_version"
+    api Libs.robolectric
+    api Libs.opentest4j
+
+    api Libs.androidx_test_core
+    api Libs.androidx_test_ext_junit
+
+    api Libs.fragment
+    // AndroidJUnitRunner and JUnit Rules
+    api Libs.androidx_test_runner
+    api Libs.androidx_test_rules
+    api Libs.espresso_core
+
+    api Libs.catch_exception
+    api Libs.androidx_core_core
+
+    api Libs.kotlin_test
+    api Libs.truth
+
+    api Libs.xmlpull
+
+}
